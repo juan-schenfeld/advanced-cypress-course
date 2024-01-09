@@ -1,25 +1,20 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+/// <reference types="cypress" />
+
+Cypress.Commands.add('login', (user = "Admin", pw="admin123") => {
+    cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').clear('|');
+    cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').type(user);
+    cy.get(':nth-child(3) > .oxd-input-group > :nth-child(2) > .oxd-input').clear('a');
+    cy.get(':nth-child(3) > .oxd-input-group > :nth-child(2) > .oxd-input').type(pw);
+    cy.get('.oxd-button').click();
+
+})
+
+Cypress.Commands.add('visitHomepage',() => {
+
+    cy.intercept({
+        method: 'GET',
+        url: '/web/index.php/core/i18n/messages'})
+        .as('loadHomePage')
+        cy.visit('/');
+        cy.wait('@loadHomePage');
+})
