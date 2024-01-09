@@ -3,20 +3,20 @@ describe('template spec', () => {
   it.only('create a new user', function() {
     cy.visitHomepage()
     cy.login()
-    //thin neds changes because if rerun the tests the username will be used.
-    let username = 'username4'
+    //this makes a random username.
+    let username = 'username' + Math.round(Math.random()*1000000)
     let pw = 'password2'
 
 
-    cy.get(':nth-child(1) > .oxd-main-menu-item > .oxd-text').click();
-    cy.get('.orangehrm-header-container > .oxd-button').click();
+    cy.get('li > a').contains('Admin').click()
+    cy.get('.orangehrm-header-container').contains('Add').click();
     //userrole
     cy.get('.oxd-select-wrapper > .oxd-select-text').eq(0).click();
     cy.get('[role=option]').contains('ESS').click();
     //status
     cy.get('.oxd-select-wrapper > .oxd-select-text').eq(1).click()
     cy.get('[role=option]').contains('Enabled').click()
-    //empleyee
+    //employee
     cy.get('.oxd-autocomplete-text-input > input').type('Odis  Adalwin');
     cy.get('[role=option]').should('have.text', 'Odis  Adalwin').click()
     //username
@@ -28,9 +28,10 @@ describe('template spec', () => {
     //submit
     cy.get('.oxd-button--secondary').click();
     cy.get('.oxd-text--toast-message').should('be.visible');
-
+    //logout
     cy.get('.oxd-userdropdown-name').click();
     cy.get(':nth-child(4) > .oxd-userdropdown-link').click();
+    //login with the new account
     cy.login(username, pw)
     cy.get('.oxd-userdropdown-name').should('have.text', 'Odis Adalwin');
   })
