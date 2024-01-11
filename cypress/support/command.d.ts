@@ -1,7 +1,6 @@
 /// <reference types="cypress" />
 
-declare global{ 
-namespace Cypress { 
+declare namespace Cypress { 
 interface Chainable {
     /**
      * 
@@ -12,4 +11,4 @@ interface Chainable {
     login()
     visitHomepage()
     }
-}}
+}
