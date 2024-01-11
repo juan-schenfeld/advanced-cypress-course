@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-describe('template spec', () => {
+describe('user manipulation related tests', () => {
   it('create a new user', function() {
     cy.visitHomepage()
     cy.login()
@@ -8,7 +8,9 @@ describe('template spec', () => {
     let pw = 'password2'
     let employeeName = 'cypress test ing'
 
+    cy.waitLoadPage()
     cy.get('li > a').contains('Admin').click()
+    cy.waitLoadPage()
     cy.get('[type="button"]').contains('Add').click()
     //userrole
     cy.get('.oxd-select-text-input').eq(0).click()
@@ -18,7 +20,7 @@ describe('template spec', () => {
     cy.get('[role=option]').contains('Enabled').click()
     //employee
     cy.get('[placeholder="Type for hints..."]').type(employeeName)
-    cy.get('[role=option]').contains(employeeName,{timeout: 6000}).click()
+    cy.get('[role=option]').contains(employeeName,{timeout: 10000}).click()
     //username
     cy.get('div:nth-child(4) div:nth-child(2) > input').type(username)
     //password
@@ -42,15 +44,17 @@ describe('template spec', () => {
     cy.visitHomepage()
     cy.login()
 
+    cy.waitLoadPage()
+    cy.get('li > a').contains('PIM').click()
+    cy.waitLoadPage()
+    
     cy.intercept({
       method: 'GET',
-      url: '/web/index.php/core/i18n/messages'}
-      ).as('loadPage')
+      url: '/web/index.php/api/v2/admin/users'})
+      .as('loadForm')
 
-    cy.get('li > a').contains('PIM').click()
-    cy.wait('@loadPage')
     cy.get('[type="button"]').contains('Add').click()
-    cy.wait('@loadPage')
+    cy.wait('@loadForm', {timeout: 10000})
 
 
     //firstname

@@ -10,16 +10,11 @@ Cypress.Commands.add('visitHomepage',() => {
     cy.intercept({
         method: 'GET',
         url: '/web/index.php/core/i18n/messages'})
-        .as('loadHomePage')
+        .as('loadPage')
         cy.visit('/')
-        cy.wait('@loadHomePage')
+        cy.waitLoadPage()
 })
 
-Cypress.Commands.add('mainMenuSelect', itemName => {
-    cy.intercept({
-        method: 'GET',
-        url: '/web/index.php/core/i18n/messages'})
-        .as('loadHomePage')
-        cy.get('li > a').contains(itemName).click()
-        cy.wait('@loadHomePage')
+Cypress.Commands.add('waitLoadPage', () => {
+    cy.wait('@loadPage', {timeout: 10000})
 })
