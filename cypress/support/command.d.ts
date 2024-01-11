@@ -1,15 +1,14 @@
 /// <reference types="cypress" />
 
-declare global{ 
-namespace Cypress { 
+declare namespace Cypress { 
 interface Chainable {
     /**
-     * logins with the recived credentials
      * @example
-     * cy.login(user,password)
+     * cy.login() logins with default admin credentials
+     * cy.login(user,password) logins with the recived credentials
     */
-    addBoard()
-
+    login(user, pw)
     visitHomepage()
+    waitLoadPage()
     }
-}}
+}
