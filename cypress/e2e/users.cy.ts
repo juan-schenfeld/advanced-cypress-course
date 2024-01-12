@@ -1,12 +1,38 @@
 /// <reference types="cypress" />
+
+import { split } from "cypress/types/lodash"
+
 describe('user manipulation related tests', () => {
-  it('create a new user', function() {
+  it.only('create a new user', function() {
     cy.visitHomepage()
     cy.login()
+    let firstname = "luke"
+    let lastname = "skywalker"
+    let fullName = firstname + " " + lastname
+
+    cy.waitLoadPage()
+    cy.get('li > a').contains('PIM').click()
+    cy.waitLoadPage()
+    
+    cy.intercept({
+      method: 'GET',
+      url: '/web/index.php/api/v2/admin/users'}
+      ).as('loadForm')
+
+    cy.get('[type="button"]').contains('Add').click()
+    cy.wait('@loadForm', {timeout: 10000})
+
+    //firstname
+    cy.get('[placeholder="First Name"]').type(firstname)
+    //lastname
+    cy.get('[placeholder="Last Name"]').type(lastname)
+    
+    cy.get('[type="submit"]').click()
+    cy.get('.oxd-toast').should('be.visible')
+
     //this makes a random username.
-    let username = 'username' + Math.round(Math.random()*1000000)
+    let username = lastname + Math.round(Math.random()*1000000)
     let pw = 'password2'
-    let employeeName = 'cypress test ing'
 
     cy.waitLoadPage()
     cy.get('li > a').contains('Admin').click()
@@ -19,8 +45,8 @@ describe('user manipulation related tests', () => {
     cy.get('.oxd-select-text-input').eq(1).click()
     cy.get('[role=option]').contains('Enabled').click()
     //employee
-    cy.get('[placeholder="Type for hints..."]').type(employeeName)
-    cy.get('[role=option]').contains(employeeName,{timeout: 10000}).click()
+    cy.get('[placeholder="Type for hints..."]').type(fullName)
+    cy.get('[role=option]').contains(fullName,{timeout: 10000}).click()
     //username
     cy.get('div:nth-child(4) div:nth-child(2) > input').type(username)
     //password
@@ -35,7 +61,7 @@ describe('user manipulation related tests', () => {
     cy.get('[role="menuitem"]').contains('Logout').click()
     //login with the new account
     cy.login(username, pw)
-    cy.get('.oxd-userdropdown-name').should('have.text', 'cypress ing')
+    cy.get('.oxd-userdropdown-name').should('have.text', fullName)
   })
 
   it('add employee with enabled account', function() {
