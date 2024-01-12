@@ -6,10 +6,10 @@ describe('recruitment related tests', () => {
         let hirinmanager = 'Orange Test'
         let role = 'QA Lead'
         let description = 'lorem ipsum dolor sit amet, consect id elit sed, sed diam nonum et d'
-        let positions = 1
+        let positions = '1'
         cy.visitHomepage()
         cy.login()
-
+        
         cy.wait('@loadPage')
         cy.get('li > a').contains('Recruitment').click()
         cy.wait('@loadPage')

@@ -7,7 +7,7 @@ interface Chainable {
      * cy.login() logins with default admin credentials
      * cy.login(user,password) logins with the recived credentials
     */
-    login(user, pw)
+    login(user?, pw?)
     visitHomepage()
     waitLoadPage()
     }
